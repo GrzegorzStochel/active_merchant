@@ -351,6 +351,7 @@ module ActiveMerchant #:nodoc:
         add_exchange_rate(post, options)
         add_destination(post, options)
         add_level_three(post, options)
+        add_transfer_data(post, options) if options[:transfer_data]
         post
       end
 
@@ -362,6 +363,7 @@ module ActiveMerchant #:nodoc:
 
       def add_application_fee(post, options)
         post[:application_fee] = options[:application_fee] if options[:application_fee]
+        post[:application_fee_amount] = options[:application_fee_amount] if options[:application_fee_amount]
       end
 
       def add_exchange_rate(post, options)
@@ -514,6 +516,11 @@ module ActiveMerchant #:nodoc:
       def add_emv_metadata(post, creditcard)
         post[:metadata] ||= {}
         post[:metadata][:card_read_method] = creditcard.read_method if creditcard.respond_to?(:read_method)
+      end
+
+      def add_transfer_data(post, options = {})
+        post[:transfer_data] ||= {}
+        post[:transfer_data][:destination] = options[:transfer_data][:destination] if options[:transfer_data][:destination]
       end
 
       def fetch_application_fee(identification, options = {})
