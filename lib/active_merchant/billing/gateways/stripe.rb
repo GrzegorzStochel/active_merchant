@@ -604,6 +604,7 @@ module ActiveMerchant #:nodoc:
         rescue ResponseError => e
           raw_response = e.response.body
           response = response_error(raw_response)
+          response['request-id'] = e.response.each_header.to_h['request-id']
         rescue JSON::ParserError
           response = json_error(raw_response)
         end
